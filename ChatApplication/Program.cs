@@ -1,6 +1,13 @@
+using ChatApplication;
+using ChatApplication.BLL;
+using ChatApplication.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.AddControllers();
+    builder.Services
+        .AddPresentationLayer()
+        .AddBusinessLogicLayer()
+        .AddDataAccessLayer(builder.Configuration);
 }
 
 var app = builder.Build();
