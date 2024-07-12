@@ -58,18 +58,6 @@ public class ChatController : ApiController
             response);
     }
 
-    /*[HttpPatch("{chatId:guid}/join")]
-    public async Task<IActionResult> JoinChat(ChatRequest request, Guid chatId)
-    {
-        var joinResult = await _chatService.JoinChat(request.UserId, chatId);
-        if (joinResult.IsSuccess)
-        {
-            return Ok();
-        }
-
-        return Problem(joinResult.Errors);
-    }*/
-
     [HttpPost("{chatId:guid}/message")]
     public async Task<IActionResult> SendMessage(SendMessageRequest request, Guid chatId)
     {

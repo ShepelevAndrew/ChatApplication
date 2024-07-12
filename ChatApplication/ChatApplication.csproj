@@ -21,4 +21,7 @@
       <ProjectReference Include="..\ChatApplication.BLL\ChatApplication.BLL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="ChatApplication.Tests" />
+    </ItemGroup>
 </Project>
