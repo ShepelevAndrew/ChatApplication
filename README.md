@@ -1,4 +1,4 @@
-# My test project for ShuttleX:rocket:
+# My test project for ShuttleX :rocket:
 ___
 
 ### :eyes: Below you can see endpoints for communicate with api/ws
