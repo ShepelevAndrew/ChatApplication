@@ -10,13 +10,16 @@ public class ChatService : IChatService
 {
     private readonly IUserRepository _userRepository;
     private readonly IChatRepository _chatRepository;
+    private readonly INotificationService _notificationService;
 
     public ChatService(
         IUserRepository userRepository,
-        IChatRepository chatRepository)
+        IChatRepository chatRepository,
+        INotificationService notificationService)
     {
         _userRepository = userRepository;
         _chatRepository = chatRepository;
+        _notificationService = notificationService;
     }
 
     public async Task<IEnumerable<Chat>> GetChats(string? search)
@@ -85,6 +88,55 @@ public class ChatService : IChatService
         return Result.Ok();
     }
 
+    public async Task<Result> SendMessage(Guid userId, Guid chatId, string message)
+    {
+        var user = await _userRepository.GetUser(userId);
+        if (user is null)
+        {
+            return Result.Fail(UserError.NotFoundError);
+        }
+
+        var chat = await _chatRepository.GetById(chatId);
+        if (chat is null)
+        {
+            return Result.Fail(ChatError.NotFoundError);
+        }
+
+        if (!await _userRepository.IsAlreadyInChat(user.UserId, chat.ChatId))
+        {
+            return Result.Fail(ChatError.IsNotInChatError);
+        }
+
+        await _notificationService.SendMessage(user, chat, message);
+        return Result.Ok();
+    }
+
+    public async Task<Result> UpdateChat(Guid userId, Guid chatId, string name)
+    {
+        var user = await _userRepository.GetUser(userId);
+        if (user is null)
+        {
+            return Result.Fail(UserError.NotFoundError);
+        }
+
+        var chat = await _chatRepository.GetById(chatId);
+        if (chat is null)
+        {
+            return Result.Fail(ChatError.NotFoundError);
+        }
+
+        var isNotOwnerUpdateChat = !(chat.OwnerId == user.UserId);
+        if (isNotOwnerUpdateChat)
+        {
+            return Result.Fail(ChatError.NoPermissionError);
+        }
+
+        chat.Update(name);
+        await _chatRepository.Update(chat);
+
+        return Result.Ok();
+    }
+
     public async Task<Result> DeleteChat(Guid userId, Guid chatId)
     {
         var user = await _userRepository.GetUser(userId);
@@ -105,7 +157,18 @@ public class ChatService : IChatService
             return Result.Fail(ChatError.NoPermissionError);
         }
 
+        await RemoveAllUsersFromChat(chat);
         await _chatRepository.Delete(chat);
+
         return Result.Ok();
+    }
+
+    private async Task RemoveAllUsersFromChat(Chat chat)
+    {
+        var users = await _userRepository.GetUsersByChat(chat.ChatId);
+        foreach (var user in users)
+        {
+            await _notificationService.RemoveFromChat(user, chat);
+        }
     }
 }

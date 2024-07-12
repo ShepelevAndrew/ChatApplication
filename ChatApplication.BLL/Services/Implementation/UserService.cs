@@ -33,4 +33,18 @@ public class UserService : IUserService
 
         return user;
     }
+
+    public async Task<Result> UpdateConnectionId(Guid userId, string connectionId)
+    {
+        var user = await _userRepository.GetUser(userId);
+        if (user is null)
+        {
+            return Result.Fail(UserError.NotFoundError);
+        }
+
+        user.UpdateConnectionId(connectionId);
+        await _userRepository.UpdateUser(user);
+
+        return Result.Ok();
+    }
 }

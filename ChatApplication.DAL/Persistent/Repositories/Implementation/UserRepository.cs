@@ -25,6 +25,12 @@ public class UserRepository : IUserRepository
         return user;
     }
 
+    public async Task UpdateUser(User user)
+    {
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<User>> GetUsersByChat(Guid chatId)
     {
         var users = await _dbContext.Chats

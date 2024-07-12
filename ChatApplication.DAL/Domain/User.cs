@@ -8,11 +8,19 @@ public class User
     {
         UserId = Guid.NewGuid();
         Name = name;
+        ConnectionId = string.Empty;
     }
 
     public Guid UserId { get; private set; }
 
     public string Name { get; private set; }
 
+    public string ConnectionId { get; private set; }
+
     public IReadOnlyList<Chat> ConnectedChats => _connectedChats.AsReadOnly();
+
+    public void UpdateConnectionId(string connectionId)
+    {
+        ConnectionId = connectionId;
+    }
 }

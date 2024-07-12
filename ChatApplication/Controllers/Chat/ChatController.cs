@@ -58,7 +58,7 @@ public class ChatController : ApiController
             response);
     }
 
-    [HttpPatch("{chatId:guid}/join")]
+    /*[HttpPatch("{chatId:guid}/join")]
     public async Task<IActionResult> JoinChat(ChatRequest request, Guid chatId)
     {
         var joinResult = await _chatService.JoinChat(request.UserId, chatId);
@@ -68,6 +68,30 @@ public class ChatController : ApiController
         }
 
         return Problem(joinResult.Errors);
+    }*/
+
+    [HttpPost("{chatId:guid}/message")]
+    public async Task<IActionResult> SendMessage(SendMessageRequest request, Guid chatId)
+    {
+        var sendMessageResult = await _chatService.SendMessage(request.UserId, chatId, request.Message);
+        if (sendMessageResult.IsSuccess)
+        {
+            return Ok();
+        }
+
+        return Problem(sendMessageResult.Errors);
+    }
+
+    [HttpPut("{chatId:guid}")]
+    public async Task<IActionResult> UpdateChat(CreateChatRequest request, Guid chatId)
+    {
+        var updateResult = await _chatService.UpdateChat(request.UserId, chatId, request.Name);
+        if (updateResult.IsSuccess)
+        {
+            return Ok();
+        }
+
+        return Problem(updateResult.Errors);
     }
 
     [HttpDelete("{chatId:guid}")]

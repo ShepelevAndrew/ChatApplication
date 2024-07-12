@@ -48,6 +48,12 @@ public class ChatRepository : IChatRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task Update(Chat chat)
+    {
+        _dbContext.Chats.Update(chat);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task Delete(Chat chat)
     {
         _dbContext.Chats.Remove(chat);

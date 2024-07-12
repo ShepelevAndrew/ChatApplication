@@ -12,7 +12,7 @@ public class ChatConfiguration : IEntityTypeConfiguration<Chat>
 
         builder.HasKey(chat => chat.ChatId);
 
-        builder.HasOne<Chat>()
+        builder.HasOne<User>()
             .WithMany()
             .HasForeignKey(chat => chat.OwnerId);
 

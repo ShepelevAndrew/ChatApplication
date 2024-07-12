@@ -8,6 +8,8 @@ public interface IUserRepository
 
     Task<User?> GetUser(Guid userId);
 
+    Task UpdateUser(User user);
+
     Task<IEnumerable<User>> GetUsersByChat(Guid chatId);
 
     Task<bool> IsAlreadyInChat(Guid userId, Guid chatId);

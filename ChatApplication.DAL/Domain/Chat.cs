@@ -23,4 +23,9 @@ public class Chat
     {
         _usersInChat.Add(user);
     }
+
+    public void Update(string name)
+    {
+        Name = name;
+    }
 }

@@ -14,6 +14,8 @@ public interface IChatRepository
 
     Task AddUserInChat(Chat chat, User user);
 
+    Task Update(Chat chat);
+
     Task Delete(Chat chat);
 
     Task<bool> IsAlreadyExist(Chat chat);

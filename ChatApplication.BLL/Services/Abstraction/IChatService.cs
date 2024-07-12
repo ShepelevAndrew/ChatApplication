@@ -15,5 +15,9 @@ public interface IChatService
 
     Task<Result> JoinChat(Guid userId, Guid chatId);
 
+    Task<Result> SendMessage(Guid userId, Guid chatId, string message);
+
+    Task<Result> UpdateChat(Guid userId, Guid chatId, string name);
+
     Task<Result> DeleteChat(Guid userId, Guid chatId);
 }
